@@ -10,6 +10,8 @@ use crate::models::{
     NewDuel, NewLurker, NewQuestion, Question,
 };
 
+pub mod stock;
+
 use crate::chatter::on_new_chatter;
 
 pub fn establish_connection() -> PgConnection {

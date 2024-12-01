@@ -87,7 +87,36 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    shares (id) {
+        id -> Int4,
+        stock_id -> Int4,
+        owner_id -> Int4,
+        quantity -> Int4,
+        price -> Numeric,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    stocks (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        #[max_length = 255]
+        symbol -> Varchar,
+        ticket_price -> Numeric,
+        future_value -> Numeric,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+        roi_percentage -> Numeric,
+    }
+}
+
 diesel::joinable!(questions -> categories (category_id));
+diesel::joinable!(shares -> chatters (owner_id));
+diesel::joinable!(shares -> stocks (stock_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     accepted_duels,
@@ -96,4 +125,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     duels,
     lurkers,
     questions,
+    shares,
+    stocks,
 );

@@ -1,11 +1,9 @@
 use crate::db;
 use crate::messaging::send_msg;
-use crate::schema::categories;
-use crate::schema::lurkers;
-use crate::schema::questions;
+use crate::schema::{categories, lurkers, questions, shares, stocks};
+use bigdecimal::BigDecimal;
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
-
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = crate::schema::chatters)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -266,4 +264,47 @@ impl Question {
     pub fn increment_times_not_answered(&mut self) -> () {
         db::update_times_not_answered(self.id);
     }
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = stocks)]
+pub struct NewStock<'a> {
+    pub name: &'a str,
+    pub symbol: &'a str,
+    pub ticket_price: BigDecimal,
+    pub future_value: BigDecimal,
+}
+
+#[derive(Debug, Clone, Queryable, Selectable)]
+#[diesel(table_name = stocks)]
+pub struct Stock {
+    pub id: i32,
+    pub name: String,
+    pub symbol: String,
+    pub ticket_price: BigDecimal,
+    pub future_value: BigDecimal,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+    pub roi_percentage: BigDecimal,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = shares)]
+pub struct NewShare {
+    pub stock_id: i32,
+    pub owner_id: i32,
+    pub quantity: i32,
+    pub price: BigDecimal,
+}
+
+#[derive(Debug, Clone, Queryable, Selectable)]
+#[diesel(table_name = shares)]
+pub struct Share {
+    pub id: i32,
+    pub stock_id: i32,
+    pub owner_id: i32,
+    pub quantity: i32,
+    pub price: BigDecimal,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }
