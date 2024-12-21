@@ -1,3 +1,5 @@
+use anyhow::Ok;
+
 use crate::chatter::{add_points, unlurk};
 use crate::commands;
 use crate::db;
@@ -57,6 +59,17 @@ pub async fn on_msg(
         Some("!top3") => commands::handle_top_duelists_command(client, msg).await,
         Some("!ranking") => commands::handle_ranking_command(client, msg).await,
         Some("!hackathon") => commands::handle_hackathon_command(client, msg).await,
+        Some("!invest") => Ok(()), // !invest AAPL 1000
+        Some("!liststocks") => commands::stock::handle_liststocks_command(client, msg).await,
+        Some("!setstockprice") => commands::stock::handle_setstockprice_command(client, msg).await, // !setstockprice <symbol> <price>
+        Some("!setstockowned") => Ok(()), // !setstockowned <user> <ticket> <points>
+        Some("!portfolio") => Ok(()),
+        Some("!sell") => Ok(()), // !sell <ticket> <points>
+        Some("!stockinfo") => Ok(()),
+        Some("!stockhistory") => Ok(()),
+        // Reach
+        Some("!call") => Ok(()),
+        Some("!short") => Ok(()),
         _ => Ok(()),
     }
 }

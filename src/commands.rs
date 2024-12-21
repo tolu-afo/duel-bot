@@ -12,6 +12,8 @@ use crate::models;
 use crate::models::Question;
 use crate::state::State;
 
+pub mod stock;
+
 pub async fn handle_yo_command(
     client: &mut tmi::Client,
     msg: &tmi::Privmsg<'_>,
