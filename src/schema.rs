@@ -74,6 +74,18 @@ diesel::table! {
 }
 
 diesel::table! {
+    orders (id) {
+        id -> Int4,
+        stock_id -> Int4,
+        owner_id -> Int4,
+        num_shares -> Int4,
+        strike_price -> Numeric,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     questions (id) {
         id -> Int4,
         question -> Text,
@@ -84,18 +96,6 @@ diesel::table! {
         times_not_answered -> Int4,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-    }
-}
-
-diesel::table! {
-    shares (id) {
-        id -> Int4,
-        stock_id -> Int4,
-        owner_id -> Int4,
-        quantity -> Int4,
-        price -> Numeric,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
     }
 }
 
@@ -114,9 +114,9 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(orders -> chatters (owner_id));
+diesel::joinable!(orders -> stocks (stock_id));
 diesel::joinable!(questions -> categories (category_id));
-diesel::joinable!(shares -> chatters (owner_id));
-diesel::joinable!(shares -> stocks (stock_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     accepted_duels,
@@ -124,7 +124,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     chatters,
     duels,
     lurkers,
+    orders,
     questions,
-    shares,
     stocks,
 );
